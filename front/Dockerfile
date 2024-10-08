@@ -4,7 +4,6 @@ FROM node:14
 # Set the working directory inside the container
 WORKDIR /app
 
-# COPY . /var/www/html/assets/
 
 RUN yarn global add webpack
 
