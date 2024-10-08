@@ -13,5 +13,6 @@ docker-compose 1.29.2
 2. go to `php` container from console command :
 # `docker exec -it <php_container_id> /bin/sh`
 <php_container_id> can be show by this command `docker container ls`
-3.from container go to /app path and then run this command `php bin/console doctrine:migrations:migrate --no-interaction`
+3.from container go to /app path and then run this command 
+# `php bin/console doctrine:migrations:migrate --no-interaction`
 4. finnally go to localhost:3000 in you browser
