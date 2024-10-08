@@ -30,7 +30,7 @@ services:
   db:
     image: mysql:latest
     environment:
-      MYSQL_DATABASE: db
+      MYSQL_DATABASE: new_db
       MYSQL_USER: user
       MYSQL_PASSWORD: password
       MYSQL_ROOT_USER: root
