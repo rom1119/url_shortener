@@ -14,9 +14,6 @@ class ShortUrl
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $host = null;
-
-    #[ORM\Column(length: 255)]
     private ?string $matched_url = null;
 
     #[ORM\Column(length: 255)]
@@ -28,18 +25,6 @@ class ShortUrl
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getHost(): ?string
-    {
-        return $this->host;
-    }
-
-    public function setHost(string $host): static
-    {
-        $this->host = $host;
-
-        return $this;
     }
 
     public function getMatchedUrl(): ?string
