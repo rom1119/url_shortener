@@ -52,9 +52,11 @@ class UrlShorterController
         return new JsonResponse(['short_url'=> $generatedShortUrl]);
     }
 
-    #[Route('/short-url/{code}', name: 'get_short_url')]
-    public function getOriginal($code, ManagerRegistry $doctrine): Response
+    #[Route('/from-short-url', name: 'from_short_url')]
+    public function getOriginal(Request $request, ManagerRegistry $doctrine): Response
     {
+        $code = $request->query->get('code');
+
         $entityManager = $doctrine->getManager();
 
         $url = $entityManager->getRepository(ShortUrl::class)->findOneBy(['short_code_for_url' => $code, 'active' => true]);
@@ -63,6 +65,40 @@ class UrlShorterController
             return new JsonResponse('ok', 404);
         }
 
-        return new JsonResponse(json_encode(['real_url'=> $url->getMatchedUrl()]), 404);
+        return new JsonResponse(['real_url'=> $url->getMatchedUrl()]);
+    }
+    
+    #[Route('/from-real-url', name: 'from_real_url')]
+    public function getRealUrl(Request $request, ManagerRegistry $doctrine): Response
+    {
+        $real_url = $request->query->get('real_url');
+        $entityManager = $doctrine->getManager();
+        $real_url = '/' . $real_url;
+        $url = $entityManager->getRepository(ShortUrl::class)->findOneBy(['matched_url' => $real_url, 'active' => true]);
+
+        if (!$url) {
+            return new JsonResponse('ok', 404);
+        }
+
+        return new JsonResponse(['real_url'=> $url->getMatchedUrl()]);
+    }
+
+    #[Route('/list-url', name: 'get_list_url')]
+    public function getListUrl(ManagerRegistry $doctrine): Response
+    {
+        $entityManager = $doctrine->getManager();
+
+        $urls = $entityManager->getRepository(ShortUrl::class)->findBy(['active' => true]);
+
+        $res = [];
+        /** @var  ShortUrl $item  */
+        foreach($urls as $item) {
+            $res[] = [
+                'oryginal_path' => $item->getMatchedUrl(),
+                'short_code' => $item->getShortCodeForUrl(),
+            ];
+        }
+
+        return new JsonResponse($res);
     }
 }
