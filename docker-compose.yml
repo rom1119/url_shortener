@@ -1,0 +1,52 @@
+version: '3.8'
+services:
+  php:
+    build:
+      context: .
+      dockerfile: php/Dockerfile
+    volumes:
+       - ./php/app:/app
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network
+
+  front:
+    build:
+      context: .
+      dockerfile: front/Dockerfile
+    volumes:
+      - ./front/app:/app
+    depends_on:
+      php:
+        condition: service_started
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - app-network
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8088:8088
+
+volumes:
+  db-data:
+  shared:
+
+networks:
+  app-network:
