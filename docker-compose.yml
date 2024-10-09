@@ -14,7 +14,7 @@ services:
     depends_on:
       - db
     command: >
-      sh -c "composer install && composer dump-autoload --optimize && php -S 0.0.0.0:8000 -t public"
+      sh -c "composer install && composer dump-autoload --optimize && php bin/console doctrine:migrations:migrate --no-interaction && php -S 0.0.0.0:8000 -t public"
 
   front:
     build:

@@ -64,7 +64,7 @@ export default function Page() {
         console.log('SUCC')
 
       console.log(response)
-        if (response.status == 200) {
+        if (response.status === 200) {
           var items: ItemType[] = []
           for (var el of response.data) {
             items.push({ short_code: el.short_code})
