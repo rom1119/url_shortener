@@ -6,12 +6,15 @@ services:
       dockerfile: php/Dockerfile
     volumes:
        - ./php/app:/app
+       - ./php/app/vendor:/app/vendor
     ports:
       - "8000:8000"
     networks:
       - app-network
     depends_on:
       - db
+    command: >
+      sh -c "composer install && composer dump-autoload --optimize && php -S 0.0.0.0:8000 -t public"
 
   front:
     build:
@@ -20,12 +23,13 @@ services:
     volumes:
       - ./front/app:/app
     depends_on:
-      php:
-        condition: service_started
+      - php
     ports:
       - "3000:3000"
     networks:
       - app-network
+    command: >
+      sh -c "yarn install && npm start"
 
   db:
     image: mysql:latest

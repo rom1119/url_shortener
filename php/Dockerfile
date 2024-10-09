@@ -23,12 +23,13 @@ COPY ./php/app /app
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Installiere die Composer-Abhängigkeiten
-RUN composer install
+# RUN composer install 
 
 # Generiere den Autoloader
-RUN composer dump-autoload --optimize
 RUN composer install --no-scripts --no-autoloader
+COPY ./php/app/* /app
 
+RUN composer dump-autoload --optimize
 # Setze die Dateiberechtigungen
 RUN chown -R www-data:www-data /app
 
